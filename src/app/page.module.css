@@ -1,0 +1,22 @@
+.main {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  width: 50%;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+
+.quickActionLabel {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.tableHeight {
+  height: 60vh;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
