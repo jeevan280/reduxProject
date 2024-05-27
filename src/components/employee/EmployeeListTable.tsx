@@ -1,25 +1,13 @@
 import React, { ChangeEvent, FC, useEffect, useState } from "react";
-import {Button, Divider, Flex, Input, message, Modal, Popconfirm, Table, Tag, Tooltip} from "antd";
+import { Button, Divider, Flex, Input, message, Modal, Popconfirm, Table, Tag, Tooltip } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { Reducers } from "@/store/store";
-import {
-  addMultipleEmployee,
-  backToInitial,
-  deleteEmployee,
-  Employee,
-  removeAllEmployee
-} from "@/store/features/employee/employeeSlice";
+import { addMultipleEmployee, backToInitial, deleteEmployee, removeAllEmployee } from "@/store/features/employee/employeeSlice";
 import CreateUpdateEmployeeForm from "@/components/employee/CreateUpdateEmployeeForm";
 import { ColumnType } from "antd/es/table";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  ReloadOutlined,
-  UserAddOutlined,
-  UsergroupAddOutlined,
-  UsergroupDeleteOutlined
-} from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, ReloadOutlined, UserAddOutlined, UsergroupAddOutlined, UsergroupDeleteOutlined } from "@ant-design/icons";
 import style from "@/app/page.module.css";
+import { Employee } from "@/types/employee";
 
 const EmployeeListTable: FC = () => {
   const dispatch = useDispatch();
@@ -27,7 +15,7 @@ const EmployeeListTable: FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee>();
-  const [searched, setSearched] = useState('');
+  const [searched, setSearched] = useState("");
   const getEmployees = useSelector((state: Reducers) => state.employee.employees);
   const [employees, setEmployees] = useState<Employee[]>();
 
@@ -123,27 +111,33 @@ const EmployeeListTable: FC = () => {
   ];
 
   useEffect(() => {
-    setEmployees(getEmployees)
-  },[getEmployees])
+    setEmployees(getEmployees);
+  }, [getEmployees]);
 
   useEffect(() => {
-    const searchedItems = searched !== '' ? getEmployees.filter(item =>
-      item.name?.toLowerCase().includes(searched.toLowerCase()) || item.email?.toLowerCase().includes(searched.toLowerCase())
-    ) : getEmployees
-    setEmployees(searchedItems)
-  }, [searched])
+    const searchedItems =
+      searched !== ""
+        ? getEmployees.filter((item) => item.name?.toLowerCase().includes(searched.toLowerCase()) || item.email?.toLowerCase().includes(searched.toLowerCase()))
+        : getEmployees;
+    setEmployees(searchedItems);
+  }, [searched]);
 
   return (
     <div>
       {contextHolder}
       <Flex gap={20}>
-        <Input placeholder={"Search for Name or Email..."} allowClear onChange={(event: ChangeEvent<HTMLInputElement>) => setSearched(event.target.value)} style={{ marginBottom: 10}}/>
+        <Input
+          placeholder={"Search for Name or Email..."}
+          allowClear
+          onChange={(event: ChangeEvent<HTMLInputElement>) => setSearched(event.target.value)}
+          style={{ marginBottom: 10 }}
+        />
         <Button type="primary" icon={<UserAddOutlined />} onClick={() => openCreateModal(true)}>
           Create New Employee
         </Button>
       </Flex>
 
-     <Table
+      <Table
         dataSource={employees}
         columns={columns}
         pagination={{ total: getEmployees.length, showTotal: (total) => `Total ${total} Employees`, showSizeChanger: true }}

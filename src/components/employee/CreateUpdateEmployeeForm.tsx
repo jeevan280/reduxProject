@@ -1,9 +1,10 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect } from "react";
 import { Button, Flex, Form, Input, message, Radio } from "antd";
-import { createEmployee, Employee, updateEmployee } from "@/store/features/employee/employeeSlice";
+import { createEmployee, updateEmployee } from "@/store/features/employee/employeeSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Reducers } from "@/store/store";
 import FormSubmitButton from "@/components/common/FormSubmitButton";
+import { Employee } from "@/types/employee";
 
 interface CreateUpdateEmployeeFormProps {
   isEdit?: boolean;
