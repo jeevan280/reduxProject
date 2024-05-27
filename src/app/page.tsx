@@ -19,8 +19,8 @@ const EmployeeList = () => {
     },
     {
       key: "3",
-      label: "Task List (Store from Server)",
-      children: <>Task List (Store from Server) using Tanstack Query</>,
+      label: "Task List (Cache from Server)",
+      children: <>Task List (Cache from Server) using Tanstack Query</>,
     },
   ];
 
