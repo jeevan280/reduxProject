@@ -1,53 +1,33 @@
 "use client";
 
-import { Button, Card, Divider, Flex, Modal } from "antd";
+import { Card, Tabs, TabsProps } from "antd";
 import style from "./page.module.css";
-import React, { useState } from "react";
+import React from "react";
 import EmployeeListTable from "@/components/employee/EmployeeListTable";
-import CreateUpdateEmployeeForm from "@/components/employee/CreateUpdateEmployeeForm";
-import { ReloadOutlined, UserAddOutlined, UsergroupAddOutlined, UsergroupDeleteOutlined } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
-import { addMultipleEmployee, backToInitial, removeAllEmployee } from "@/store/features/employee/employeeSlice";
 
 const EmployeeList = () => {
-  const dispatch = useDispatch();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleModal = (isClose = false) => {
-    setIsModalOpen(isClose);
-  };
+  const items: TabsProps["items"] = [
+    {
+      key: "1",
+      label: "Employee List (Store from client)",
+      children: <EmployeeListTable />,
+    },
+    {
+      key: "2",
+      label: "Task List (Store from Server)",
+      children: <>Task List (Store from Server) using Redux Store</>,
+    },
+    {
+      key: "3",
+      label: "Task List (Store from Server)",
+      children: <>Task List (Store from Server) using Tanstack Query</>,
+    },
+  ];
 
   return (
     <div className={style.main}>
-      <Card
-        className={style.card}
-        title="Employee List"
-        extra={
-          <Button type="primary" icon={<UserAddOutlined />} onClick={() => handleModal(true)}>
-            Create New Employee
-          </Button>
-        }
-      >
-        <EmployeeListTable />
-        <Modal title="Create Employee" open={isModalOpen} onCancel={() => handleModal()} footer={null} centered>
-          <CreateUpdateEmployeeForm isEdit={false} onCancel={() => setIsModalOpen(false)} />
-        </Modal>
-
-        <Divider>
-          <div className={style.quickActionLabel}>Quick Actions</div>
-        </Divider>
-
-        <Flex wrap={"wrap"} justify={"center"} gap={15}>
-          <Button icon={<ReloadOutlined />} onClick={() => dispatch(backToInitial())}>
-            Reload
-          </Button>
-          <Button icon={<UsergroupAddOutlined />} onClick={() => dispatch(addMultipleEmployee())}>
-            Add 50 Employees
-          </Button>
-          <Button icon={<UsergroupDeleteOutlined />} onClick={() => dispatch(removeAllEmployee())}>
-            Remove All Employees
-          </Button>
-        </Flex>
+      <Card className={style.card} title="State and Cache Management">
+        <Tabs defaultActiveKey="1" items={items} style={{ marginTop: -20 }} />
       </Card>
     </div>
   );

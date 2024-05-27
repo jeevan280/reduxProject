@@ -6,8 +6,10 @@
 }
 
 .card {
-  width: 50%;
+  width: 70%;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  height: 80vh;
+  overflow: auto;
 }
 
 .quickActionLabel {

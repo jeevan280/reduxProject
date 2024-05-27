@@ -1,17 +1,31 @@
 import React, { ChangeEvent, FC, useEffect, useState } from "react";
-import { Button, Flex, Input, message, Modal, Popconfirm, Table, Tag, Tooltip } from "antd";
+import {Button, Divider, Flex, Input, message, Modal, Popconfirm, Table, Tag, Tooltip} from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { Reducers } from "@/store/store";
-import { deleteEmployee, Employee } from "@/store/features/employee/employeeSlice";
+import {
+  addMultipleEmployee,
+  backToInitial,
+  deleteEmployee,
+  Employee,
+  removeAllEmployee
+} from "@/store/features/employee/employeeSlice";
 import CreateUpdateEmployeeForm from "@/components/employee/CreateUpdateEmployeeForm";
 import { ColumnType } from "antd/es/table";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  ReloadOutlined,
+  UserAddOutlined,
+  UsergroupAddOutlined,
+  UsergroupDeleteOutlined
+} from "@ant-design/icons";
 import style from "@/app/page.module.css";
 
 const EmployeeListTable: FC = () => {
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee>();
   const [searched, setSearched] = useState('');
   const getEmployees = useSelector((state: Reducers) => state.employee.employees);
@@ -32,7 +46,11 @@ const EmployeeListTable: FC = () => {
   const openUpdateModal = (id: number) => {
     const employee = getEmployees.find((emp) => emp.id === id);
     setSelectedEmployee(employee);
-    setIsModalOpen(true);
+    setIsUpdateModalOpen(true);
+  };
+
+  const openCreateModal = (isOpen = false) => {
+    setIsCreateModalOpen(isOpen);
   };
 
   const columns: ColumnType<Employee>[] = [
@@ -118,17 +136,44 @@ const EmployeeListTable: FC = () => {
   return (
     <div>
       {contextHolder}
-      <Input placeholder={"Search for Name or Email..."} allowClear onChange={(event: ChangeEvent<HTMLInputElement>) => setSearched(event.target.value)} style={{ marginBottom: 10}}/>
-      <Table
+      <Flex gap={20}>
+        <Input placeholder={"Search for Name or Email..."} allowClear onChange={(event: ChangeEvent<HTMLInputElement>) => setSearched(event.target.value)} style={{ marginBottom: 10}}/>
+        <Button type="primary" icon={<UserAddOutlined />} onClick={() => openCreateModal(true)}>
+          Create New Employee
+        </Button>
+      </Flex>
+
+     <Table
         dataSource={employees}
         columns={columns}
         pagination={{ total: getEmployees.length, showTotal: (total) => `Total ${total} Employees`, showSizeChanger: true }}
         bordered
         className={style.tableHeight}
       />
+
+      <Divider>
+        <div className={style.quickActionLabel}>Quick Actions</div>
+      </Divider>
+
+      <Flex wrap={"wrap"} justify={"center"} gap={15}>
+        <Button icon={<ReloadOutlined />} onClick={() => dispatch(backToInitial())}>
+          Reload
+        </Button>
+        <Button icon={<UsergroupAddOutlined />} onClick={() => dispatch(addMultipleEmployee())}>
+          Add 50 Employees
+        </Button>
+        <Button icon={<UsergroupDeleteOutlined />} onClick={() => dispatch(removeAllEmployee())}>
+          Remove All Employees
+        </Button>
+      </Flex>
+
+      <Modal title="Create Employee" open={isCreateModalOpen} onCancel={() => openCreateModal()} footer={null} centered>
+        <CreateUpdateEmployeeForm isEdit={false} onCancel={() => openCreateModal()} />
+      </Modal>
+
       {selectedEmployee && (
-        <Modal title="Update Employee" open={isModalOpen} onCancel={() => setIsModalOpen(false)} footer={null} centered>
-          <CreateUpdateEmployeeForm isEdit employeeData={selectedEmployee} onCancel={() => setIsModalOpen(false)} />
+        <Modal title="Update Employee" open={isUpdateModalOpen} onCancel={() => setIsUpdateModalOpen(false)} footer={null} centered>
+          <CreateUpdateEmployeeForm isEdit employeeData={selectedEmployee} onCancel={() => setIsUpdateModalOpen(false)} />
         </Modal>
       )}
     </div>
