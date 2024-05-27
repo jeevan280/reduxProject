@@ -1,21 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-export interface Employee {
-  key: number;
-  id: number;
-  name: string;
-  email: string;
-  isActive: boolean;
-}
-
-export interface EmployeeInitialState {
-  employees: Employee[];
-}
+import { Employee, EmployeeInitialState } from "@/types/employee";
 
 const initialState: EmployeeInitialState = {
   employees: [
     {
-      key:1 ,
+      key: 1,
       id: 1,
       name: "John Smith",
       email: "john@mail.com",
